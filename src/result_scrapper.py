@@ -62,6 +62,9 @@ for row in soup.select("table tr"):
             final_result  = {"lottery_name" : lottery_name, "results" : lottery_result}
             print(final_result)
             publish_lottery_result(lottery_name, final_result)
+            if os.path.exists(filename):
+                os.remove(filename)
+                print("File deleted")
             pdf_found = True
         else:
             print("Response is not PDF")

@@ -10,14 +10,7 @@ def parse_lottery_pdf(pdf_path):
     full_text = ""
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
-
-            width = page.width
-            height = page.height
-            top_margin = 100 
-            bottom_margin = height - 100
-            bounding_box = (0, top_margin, width, bottom_margin)
-            clean_page = page.within_bbox(bounding_box)
-            text = clean_page.extract_text(layout=True)
+            text = page.extract_text(layout=True)
             if not text:
                 continue
             lines = text.split('\n')
@@ -34,11 +27,17 @@ def parse_lottery_pdf(pdf_path):
         cleaned_text = full_text[full_text.index(target):]
         if end_marker in cleaned_text:
             cleaned_text = cleaned_text.split(end_marker)[0]
+        cleaned_text = remove_footer(cleaned_text)
+        print("=================================================")    
+        print(cleaned_text)
+        print("=================================================") 
         return parse_lottery_result(cleaned_text)
     else:
         print("Marker not found.")
 
-
+def remove_footer(text: str) -> str:
+    pattern = r"\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}.*?Page\s+\d+"
+    return re.sub(pattern, "", text)
 
 def parse_lottery_result(text: str):
     result = {}
@@ -76,7 +75,8 @@ def parse_lottery_result(text: str):
         "5th Prize": r"5th Prize-Rs\s*:\s*(\d+)/-\s*([\s\S]*?)6th Prize",
         "6th Prize": r"6th Prize-Rs\s*:\s*(\d+)/-\s*([\s\S]*?)7th Prize",
         "7th Prize": r"7th Prize-Rs\s*:\s*(\d+)/-\s*([\s\S]*?)8th Prize",
-        "8th Prize": r"8th Prize-Rs\s*:\s*(\d+)/-\s*([\s\S]*?)$",
+        "8th Prize": r"8th Prize-Rs\s*:\s*(\d+)/-\s*([\s\S]*?)9th Prize",
+        "9th Prize": r"9th Prize-Rs\s*:\s*(\d+)/-\s*([\s\S]*?)$",
     }
 
     for prize, pattern in prize_blocks.items():
