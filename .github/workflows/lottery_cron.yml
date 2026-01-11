@@ -2,7 +2,7 @@ name: Kerala Lottery Scraper Cron
 
 on:
   schedule:
-    - cron: "*/10 9-14 * * *"   # Every 10 min, 09:00–14:59 UTC
+    - cron: "*/10 10-13 * * *"   # Every 10 min, 10:00–12:59 UTC
   workflow_dispatch:           # Allow manual run
 
 jobs:
