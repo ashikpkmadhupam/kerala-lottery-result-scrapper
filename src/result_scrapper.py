@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import datetime
 import os
 from pdf_parser.lottery_result_parser import parse_lottery_pdf
-from firebase.push_data import publish_lottery_result
+from firebase.push_data import publish_lottery_result, get_last_notified_result, push_last_notified_result, push_fcm_notification
 
 
 BASE_URL = "https://statelottery.kerala.gov.in"
@@ -62,6 +62,13 @@ for row in soup.select("table tr"):
             final_result  = {"lottery_name" : lottery_name, "results" : lottery_result}
             print(final_result)
             publish_lottery_result(lottery_name, final_result)
+            last_notified = get_last_notified_result()
+            print(f"============== {lottery_name}============================")
+            print(f"============== {draw_date}============================")
+            if last_notified != lottery_name+"_"+draw_date:
+                push_fcm_notification(lottery_name, draw_date)
+                push_last_notified_result(lottery_name, draw_date)
+
             if os.path.exists(filename):
                 os.remove(filename)
                 print("File deleted")
