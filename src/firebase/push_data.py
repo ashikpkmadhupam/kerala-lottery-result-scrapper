@@ -37,8 +37,8 @@ def push_last_notified_result(lottery_name, date):
 
 
 def push_fcm_notification(lottery_name, draw_date):
-    notification_title = f"Kerala lottery results are out"
-    notification_body = f"Today's draw result for {lottery_name} ({draw_date}) has been published. Tap to check your luck"
+    notification_title = "💰 Did You Win Today?"
+    notification_body = f"{lottery_name} draw results ({draw_date}) are published. Tap to check your prize instantly!"
     message = messaging.Message(notification=messaging.Notification(notification_title, notification_body), android=messaging.AndroidConfig(
         priority="high",
         notification=messaging.AndroidNotification(
