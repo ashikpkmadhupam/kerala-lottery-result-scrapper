@@ -5,6 +5,10 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
+def health_check():
+    return jsonify({"status": "SUCCESS", "message" : "Working!"}), 200
+
+@app.route("/scrape", methods=["GET"])
 def run_lottery_scrapper():
     result = scrape_lottery_result()
     return jsonify({"status": "SUCCESS", "message" : result}), 200
