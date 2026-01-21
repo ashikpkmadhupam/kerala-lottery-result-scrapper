@@ -1,17 +1,18 @@
+import logging
 from scrapper.result_scrapper import scrape_lottery_result
-from flask import Flask, jsonify
+import sys
+from datetime import datetime
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    stream=sys.stdout
+)
 
-app = Flask(__name__)
-
-@app.route("/", methods=["GET"])
-def health_check():
-    return jsonify({"status": "SUCCESS", "message" : "Working!"}), 200
-
-@app.route("/scrape", methods=["GET"])
 def run_lottery_scrapper():
-    result = scrape_lottery_result()
-    return jsonify({"status": "SUCCESS", "message" : result}), 200
+    logging.info("RUN Started")
+    scrape_lottery_result()
+    logging.info("RUN Completed")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port = 8080, debug=False)
+    run_lottery_scrapper()

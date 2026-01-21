@@ -1,5 +1,6 @@
 from .firebase_config import firestore_db, messaging
 import datetime
+import logging
 
 def publish_lottery_result(lottery_name: str, result: dict):
     today = datetime.date.today().strftime("%Y-%m-%d")
@@ -9,7 +10,7 @@ def publish_lottery_result(lottery_name: str, result: dict):
         .document(lottery_name) \
         .set(result)
 
-    print("✅ Firestore upload successful")
+    logging.info("Firestore upload successful")
 
 def get_last_notified_result():
     doc_ref  = firestore_db \
@@ -19,10 +20,10 @@ def get_last_notified_result():
     if doc.exists:
         data = doc.to_dict()
         last_notified = data.get("last_notified_result")
-        print(f"Last notified result : {last_notified}")
+        logging.info(f"Last notified result : {last_notified}")
         return last_notified
     else:
-        print(f"Last notified result not exists!")
+        logging.info(f"Last notified result not exists!")
         return None
     
 def push_last_notified_result(lottery_name, date):
@@ -33,7 +34,7 @@ def push_last_notified_result(lottery_name, date):
         .document("details") \
         .set(notification_details)
 
-    print("✅ Firestore last_notified update successful")
+    logging.info("Firestore last_notified update successful")
 
 
 def push_fcm_notification(lottery_name, draw_date):
@@ -46,6 +47,6 @@ def push_fcm_notification(lottery_name, draw_date):
         )
     ), topic="lottery_result_notifications")
     response = messaging.send(message)
-    print(f"✅ FCM Notification push successful {response}")
+    logging.info(f"FCM Notification push successful {response}")
 
             
