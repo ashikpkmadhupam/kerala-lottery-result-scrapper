@@ -1,30 +1,51 @@
-name: Deploy to Cloud Run
+name: Deploy Kerala Lottery Scrapper Job
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 permissions:
-  id-token: write
   contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: lottery-result-checker
+  REGION: asia-south1
+  REPOSITORY: kerala-lottery
+  IMAGE: kerala-lottery-scrapper
+  JOB_NAME: kerala-lottery-scrapper-job
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - uses: google-github-actions/auth@v2
-      with:
-        workload_identity_provider: projects/255290345904/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-        service_account: github-deployer@lottery-result-checker.iam.gserviceaccount.com
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/255290345904/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-deployer@lottery-result-checker.iam.gserviceaccount.com
 
-    - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: lottery-result-checker
 
-    - run: |
-        gcloud run deploy kerala-lottery-scrapper \
-          --source . \
-          --region asia-south1 \
-          --platform managed \
-          --allow-unauthenticated
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t asia-south1-docker.pkg.dev/lottery-result-checker/kerala-lottery/kerala-lottery-scrapper:latest .
+          docker push asia-south1-docker.pkg.dev/lottery-result-checker/kerala-lottery/kerala-lottery-scrapper:latest
+
+      - name: Update Cloud Run Job
+        run: |
+          gcloud run jobs update kerala-lottery-scrapper-job \
+            --image asia-south1-docker.pkg.dev/lottery-result-checker/kerala-lottery/kerala-lottery-scrapper:latest \
+            --region asia-south1
