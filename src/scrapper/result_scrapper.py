@@ -59,7 +59,7 @@ def scrape_lottery_result():
                     f.write(pdf_response.content)
 
                 logging.info(f"PDF downloaded: {filename}")
-                lottery_result = parse_lottery_pdf(filename)
+                lottery_result = parse_lottery_pdf(filename, lottery_name)
                 final_result  = {"lottery_name" : lottery_name, "results" : lottery_result}
                 publish_lottery_result(lottery_name, final_result)
                 last_notified = get_last_notified_result()
