@@ -1,4 +1,4 @@
-name: My Workflow
+name: run_lottery_scrapper
 
 on:
   workflow_dispatch:
