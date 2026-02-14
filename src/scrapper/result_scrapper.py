@@ -11,7 +11,7 @@ def scrape_lottery_result():
     RESULT_URL = BASE_URL + "/index.php/lottery-result-view"
 
     # Today's date in table format
-    today = datetime.date.today()
+    today = datetime.date.today()- datetime.timedelta(days=1)
     today_str = today.strftime("%d/%m/%Y")
 
     session = requests.Session()
@@ -75,7 +75,6 @@ def scrape_lottery_result():
                 pdf_found = True
             else:
                 logging.info(f"Response is not a PDF : {content_type}")
-            break
 
     if not pdf_found:
         logging.info(f"No result found for {today_str}")
