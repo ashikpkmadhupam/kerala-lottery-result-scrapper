@@ -11,7 +11,7 @@ def scrape_lottery_result():
     RESULT_URL = BASE_URL + "/index.php/lottery-result-view"
 
     # Today's date in table format
-    today = datetime.date.today()- datetime.timedelta(days=1)
+    today = datetime.date.today()
     today_str = today.strftime("%d/%m/%Y")
 
     session = requests.Session()
