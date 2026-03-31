@@ -49,7 +49,7 @@ def scrape_lottery_result():
     RESULT_URL = "https://result.keralalotteries.com"
 
     # Today's date in table format
-    today = datetime.date.today()
+    today = datetime.date.today()- datetime.timedelta(days=1)
     today_str = today.strftime("%d/%m/%Y")
 
     session = requests.Session()
