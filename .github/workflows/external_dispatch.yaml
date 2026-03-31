@@ -6,6 +6,8 @@ on:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    env:
+      FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
