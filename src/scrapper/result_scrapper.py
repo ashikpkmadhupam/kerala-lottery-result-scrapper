@@ -45,8 +45,8 @@ def open_result(view_url:str, draw_date:str, lottery_name=None):
         return False
 
 def scrape_lottery_result():
-    BASE_URL = "https://result.keralalotteries.com/"
-    RESULT_URL = "https://result.keralalotteries.com"
+    BASE_URL = "https://statelottery.kerala.gov.in"
+    RESULT_URL = BASE_URL + "/index.php/lottery-result-view"
 
     # Today's date in table format
     today = datetime.date.today()- datetime.timedelta(days=1)
