@@ -6,6 +6,7 @@ on:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    environment: prod
     env:
       FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
     steps:
