@@ -17,6 +17,13 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Debug env
+        run: |
+            echo "FIREBASE_KEY length:"
+            echo ${#FIREBASE_KEY}
+        env:
+            FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
