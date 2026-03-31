@@ -10,6 +10,8 @@ jobs:
     env:
       FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
     steps:
+      - name: Test connectivity
+        run: curl -I https://statelottery.kerala.gov.in/index.php/lottery-result-view
       - name: Checkout repository
         uses: actions/checkout@v4
 
