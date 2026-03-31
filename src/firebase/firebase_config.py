@@ -2,10 +2,13 @@ import os
 import firebase_admin
 from firebase_admin import credentials, firestore, messaging
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-KEY_PATH = os.path.join(BASE_DIR, "firebase_key.json")
+firebase_key = os.environ.get("FIREBASE_KEY")
 
-cred = credentials.Certificate(KEY_PATH)
+if not firebase_key:
+    raise ValueError("FIREBASE_KEY not found in environment variables")
+
+cred_dict = json.loads(firebase_key)
+cred = credentials.Certificate(cred_dict)
 
 # Initialize app ONLY ONCE
 if not firebase_admin._apps:
